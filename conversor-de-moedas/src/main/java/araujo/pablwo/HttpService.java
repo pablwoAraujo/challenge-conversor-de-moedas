@@ -17,7 +17,6 @@ public class HttpService {
 
     public ConversionResult getConversionResult(String baseCode, String targetCode, double amount) {
         String address = URL + APIKEY + "/pair/" + baseCode + "/" + targetCode + "/" + amount;
-        System.out.println(address);
         URI uri = URI.create(address);
 
         HttpClient client = HttpClient.newHttpClient();
