@@ -34,6 +34,7 @@ Este projeto é minha solução para o desafio da formação **Java e Orientaç�
 Demonstração da aplicação |  
 :-------------------------:|
 ![](./demo.gif) |
+Vídeo disponível no meu [YouTube](https://youtu.be/UgDYLX20WFQ).|
 
 
 ## 🎖️Badge
