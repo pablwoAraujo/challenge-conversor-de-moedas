@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Main {
     private static String base = "BRL";
-    private static final String[] currencyCodes = {"BRL", "USD", "EUR", "GBP", "JPY", "KRW", "ARS"};
+    private static final String[] currencyCodes = { "BRL", "USD", "EUR", "GBP", "JPY", "KRW", "ARS" };
     private static final List<ConversionHistory> history = new ArrayList<>();
 
     private static final HttpService service = new HttpService();
@@ -26,39 +26,20 @@ public class Main {
             String finalBase = base;
             Object[] target = Arrays.stream(currencyCodes).filter(predicate -> !predicate.equals(finalBase)).toArray();
             switch (menuOption) {
-                case "1":
-                    convert(input, base, target[0].toString());
-                    break;
-                case "2":
-                    convert(input, base, target[1].toString());
-                    break;
-                case "3":
-                    convert(input, base, target[2].toString());
-                    break;
-                case "4":
-                    convert(input, base, target[3].toString());
-                    break;
-                case "5":
-                    convert(input, base, target[4].toString());
-                    break;
-                case "6":
-                    convert(input, base, target[5].toString());
-                    break;
-                case "7":
-                    changeCurrencyBase(input);
-                    break;
-                case "8":
-                    otherConversions(input);
-                    break;
-                case "9":
-                    viewConversionHistory();
-                    break;
-                case "0":
+                case "1" -> convert(input, base, target[0].toString());
+                case "2" -> convert(input, base, target[1].toString());
+                case "3" -> convert(input, base, target[2].toString());
+                case "4" -> convert(input, base, target[3].toString());
+                case "5" -> convert(input, base, target[4].toString());
+                case "6" -> convert(input, base, target[5].toString());
+                case "7" -> changeCurrencyBase(input);
+                case "8" -> otherConversions(input);
+                case "9" -> viewConversionHistory();
+                case "0" -> {
                     System.out.println("Encerrando o programa...");
                     return;
-                default:
-                    System.out.println("Opção inválida!");
-                    break;
+                }
+                default -> System.out.println("Opção inválida!");
             }
             System.out.print("-- Pressione ENTER para voltar --");
             input.nextLine();
@@ -86,7 +67,7 @@ public class Main {
 
     public static void convert(Scanner input, String base, String target) {
         System.out.print("Digite o quanto você quer converter: ");
-        double amount = 0;
+        double amount;
 
         try {
             String inputText = input.nextLine();
@@ -94,9 +75,10 @@ public class Main {
 
             LocalDateTime date = LocalDateTime.now();
             ConversionResult result = service.getConversionResult(base, target, amount);
-            history.add(new ConversionHistory(date, result.baseCode(), result.targetCode(), amount, result.conversionRate(), result.conversionResult()));
+            history.add(new ConversionHistory(date, result.baseCode(), result.targetCode(), amount,
+                    result.conversionRate(), result.conversionResult()));
             System.out.printf("Resultado: %.2f %s%n", result.conversionResult(), target);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("Falha na conversão, tente novamente!");
         }
     }
@@ -113,7 +95,7 @@ public class Main {
         try {
             String newBase = input.nextLine();
             base = currencyCodes[Integer.parseInt(newBase) - 1];
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("Falha ao trocar de moeda, tente novamente!");
         }
     }
@@ -143,7 +125,6 @@ public class Main {
         convert(input, baseCurrency, targetCurrency);
     }
 
-
     public static void viewConversionHistory() {
         if (history.isEmpty()) {
             System.out.println("Nenhuma conversão foi realizada!");
@@ -154,7 +135,8 @@ public class Main {
                 String rate = String.format("(1 %s = %f %s)", a.base(), a.rate(), a.target());
                 String formattedDate = a.date().format(format);
 
-                System.out.printf("[%s] %.2f %s para %s %s = %.2f %s\n", formattedDate, a.amount(), a.base(), a.target(), rate, a.result(), a.target());
+                System.out.printf("[%s] %.2f %s para %s %s = %.2f %s\n", formattedDate, a.amount(), a.base(),
+                        a.target(), rate, a.result(), a.target());
             });
         }
     }
